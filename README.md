@@ -1,1 +1,1 @@
-# Brownian-Motion
+# Brownian Motion
