@@ -137,7 +137,7 @@ class Simulation:
 
 
 if __name__ == '__main__':
-  import matplotlib; matplotlib.use('TkAgg')
+  import matplotlib; matplotlib.use('TkAgg')     # if this line gives an error try disabling it
   import matplotlib.pyplot as plt
   #from scipy.optimize import curve_fit
 
