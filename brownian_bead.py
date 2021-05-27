@@ -9,14 +9,17 @@ import random
 # preamble
 
 parity = (-1, +1)
-N = 1001                               # N = number of steps
-Fx = np.random.normal(0.5, 0.2, N)     # random forces in the x-direction
-Fy = np.random.normal(0.5, 0.2, N)
-all_pos_xy = []     # (x, y) of all beads in simulation
-all_vel_xy = []     # (vx, vy) of all beads
+N = 100001                             # N = number of steps
+Fx = np.random.normal(0.5, 0.2, N)     # random forces in the x-direction...
+Fy = np.random.normal(0.5, 0.2, N)     # ...for the Bead class
+
+all_pos_xy = []     # (x, y) of bead in random walk
+all_vel_xy = []     # (vx, vy) of bead in random walk
 all_sim_pos = []    # (x, y) position of all beads in simulation
 #all_sim_vel = []
-xs = None; ys = None #old
+xs = None; ys = None
+end_to_end = []     # end 2 end dist. of chain @ each time in simulation
+Rg = []             # radius of gyration
 
 
 ################  Bead Class  ################
@@ -33,24 +36,29 @@ class Bead:
 
 
 
-  def force_calculate(self, j, k=0):     # avoid calling outside of 'advance' method
-    if xs != None:
-      x_force = Fx[j] * random.choice(parity) - k*(len(xs)*self.x - np.sum(xs))
-      y_force = Fy[j] * random.choice(parity) - k*(len(ys)*self.y - np.sum(ys))
+  def force_calculate(self, j, jj=None, k=0):     # avoid calling outside of 'advance' method
+    if xs != None:  #new loop
+      if j == 0:
+        x_force = Fx_sim[jj, j] - k*(self.x - xs[j+1])  # 1 vs j+1
+        y_force = Fy_sim[jj, j] - k*(self.y - ys[j+1])
+      elif j == (len(xs) - 1):
+        x_force = Fx_sim[jj, j] - k*(self.x - xs[j-1])
+        y_force = Fy_sim[jj, j] - k*(self.y - ys[j-1])
+      else: #if j != (0 or len(xs)-1):
+        x_force = Fx_sim[jj, j] * random.choice(parity) - k*(2*self.x - xs[j-1] - xs[j+1])
+        y_force = Fy_sim[jj, j] * random.choice(parity) - k*(2*self.y - ys[j-1] - ys[j+1])
+      #x_force = Fx[j] * random.choice(parity) - k*(len(xs)*self.x - np.sum(xs))  #old #j=i
+      #y_force = Fy[j] * random.choice(parity) - k*(len(ys)*self.y - np.sum(ys))  #old
 
     elif xs == None:
-      x_force = Fx[j] * random.choice(parity) - k*self.x        # parity is random EACH time
-      y_force = Fy[j] * random.choice(parity) - k*self.y
+      x_force = Fx[j] * random.choice(parity) - k*self.x     # parity is random EACH time
+      y_force = Fy[j] * random.choice(parity) - k*self.y     # j - 1 vs j ???
     return (x_force, y_force)
 
 
   def advance(self, Δt, b=1, κ=0):     # κ instead of k just in case the kernel gets confused
     """Advance the beads's position according to its velocity...
     ...need function to change vs based on F."""
-
-    global velocities         # global to evaluate globally
-    global positions          # at this point don't need global for any of these...
-    global positions_xy       # ... just nice to have
 
     positions_xy = [(self.x, self.y)]     # initialize
     velocities = [(self.vx, self.vy)]     # initialize
@@ -64,12 +72,6 @@ class Bead:
 
       self.vx = np.array(velocities)[i, 0]                                  # advance velocity based...
       self.vy = np.array(velocities)[i, 1]                                  # ...: vy[i] = y[i]*Δt + vy[i-1]
-
-    #positions = []     # initialize in matrix format
-    #for position in positions_xy:
-    #  r = np.sqrt(position[0]**2 + position[1]**2)  # r = \sqrt{x^2 + y^2}
-    #  positions.append(r)                           # list of r at each point
-    #positions = np.array(positions)                 # positions list is now a NumPy array
 
     all_pos_xy.append(positions_xy)     # append current bead pos in all_pos_xy
     all_vel_xy.append(velocities)       # append current bead vel in all_vel_xy
@@ -96,16 +98,26 @@ class Simulation:
   """Simulation class based on Bead class."""
   def __init__(self, nbeads, x=0, y=0, vx=0, vy=0):
     self.nbeads = nbeads
-    self.beads = [self.init_bead() for i in range(nbeads)]
+    self.beads = [self.init_bead(x=i/10, y=0) for i in range(nbeads)]     # i vs 0
 
+    global Fx_sim     # global forces for simulation
+    global Fy_sim
+
+    Fx_sim = []
+    Fy_sim = []
+    for i in range(N):
+      Fx_sim.append(np.random.normal(0, 1, nbeads))     # SCALE W/κ
+      Fy_sim.append(np.random.normal(0, 1, nbeads))     # SCALE W/κ
+    Fx_sim = np.array(Fx_sim)
+    Fy_sim = np.array(Fy_sim)
 
   def init_bead(self, x=0, y=0, vx=0, vy=0):
     return Bead(x, y, vx, vy)
 
 
   def advance(self, Δt, b=1, κ=0):
-    global xs #new  # not sure why but must globalize to reflect global change
-    global ys #new
+    global xs   # not sure why but must globalize to reflect global change
+    global ys
 
     xs = []  # list containing the current x positions of all beads in sim...
     ys = []  # ...all the particles move at once
@@ -114,41 +126,48 @@ class Simulation:
     yj = []  # ... have advanced. Then set xs = xj so all beads advance at once
 
     for i in range(self.nbeads):
-      all_sim_pos.append([(0,0)])  # [(0,0)] vs []
+      all_sim_pos.append([(i/10,0)])     # [(0,0)] vs [] vs [(i,i)]
       #all_sim_vel.append([])
 
     for bead in self.beads:
       xs.append(bead.x)     # store all the init pos of the beads
       ys.append(bead.y)
+    end_to_end.append((xs[-1] - xs[0], ys[-1] - ys[0]))  # 1st e2e element
+    Rg.append(np.sqrt(np.var(xs) + np.var(ys)))          # 1st Rg element
 
     for i in range(N-1):
       for n, bead in enumerate(self.beads):
-        bead.x = bead.x + (bead.force_calculate(k=κ, j=i)[0] / b)*Δt
-        bead.y = bead.y + (bead.force_calculate(k=κ, j=i)[1] / b)*Δt
-        #xs.append(bead.x); ys.append(bead.y)     # not all at once
-        #xs = xs[1:]; ys = ys[1:]                 # delete one by one
+        bead.x = bead.x + (bead.force_calculate(k=κ, j=n, jj=i)[0] / b)*Δt
+        bead.y = bead.y + (bead.force_calculate(k=κ, j=n, jj=i)[1] / b)*Δt
+        #xs.append(bead.x); ys.append(bead.y)     # not all at once...
+        #xs = xs[1:]; ys = ys[1:]                 # ...delete one by one
         xj.append(bead.x); yj.append(bead.y)
         all_sim_pos[n].append( (bead.x, bead.y) )
         #all_sim_vel[n].append( () )     #  might eventually include velocity
       xs = xj; ys = yj       # advance all at once
       xj = []; yj = []       # reset to advance all at once next time
+      end_to_end.append((xs[-1] - xs[0], ys[-1] - ys[0]))   # e2e @ each time
+      Rg.append(np.sqrt(np.var(xs) + np.var(ys)))           # Rg @ each time
     xs = None; ys = None     # reset xs and ys to
 ###############################################################################
 
 
 if __name__ == '__main__':
-  import matplotlib; matplotlib.use('TkAgg')     # If this line gives an error try disabling it.
+  # The Fundumentals
+  import matplotlib; matplotlib.use('TkAgg')
   import matplotlib.pyplot as plt
-  #from scipy.optimize import curve_fit
+  from scipy.optimize import curve_fit
 
-  time = np.linspace(0, 100, N)
-  Δt = time[1] - time[0]
+  Δt = 0.01
+  t = []
+  tt = 0
+  for i in range(N):
+    t.append(tt)
+    tt += Δt
 
   sim0 = Simulation(nbeads=2)
   sim0.advance(Δt, κ=1)
-  b1 = np.array(all_sim_pos[0])
-  b2 = np.array(all_sim_pos[1])
 
-  plt.plot(b1[:, 0], b1[:, 1], ',')
-  plt.plot(b2[:, 0], b2[:, 1], ',')
-  plt.show()
+  Ree = []     # end to end radius; i.e., \sqrt{x^2 + y^2}
+  for xy in end_to_end:
+    Ree.append(np.sqrt(xy[0]**2 + xy[1]**2))
