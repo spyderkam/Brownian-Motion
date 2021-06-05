@@ -5,11 +5,10 @@ import random
 
 ###############################################################################
 
-
 # preamble
 
 parity = (-1, +1)
-N = 100001                             # N = number of steps
+N = 100001                               # N = number of steps
 Fx = np.random.normal(0.5, 0.2, N)     # random forces in the x-direction...
 Fy = np.random.normal(0.5, 0.2, N)     # ...for the Bead class
 
@@ -33,7 +32,6 @@ class Bead:
     self.vx = vx
     self.vy = vy
     self.vel = (vx, vy)
-
 
 
   def force_calculate(self, j, jj=None, k=0):     # avoid calling outside of 'advance' method
