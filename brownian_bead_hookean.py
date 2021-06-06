@@ -10,7 +10,7 @@ import random
 parity = (-1, +1)
 N = 100001                               # N = number of steps
 Fx = np.random.normal(0.5, 0.2, N)     # random forces in the x-direction...
-Fy = np.random.normal(0.5, 0.2, N)     # ...for the Bead class
+Fy = np.random.normal(0.5, 0.2, N)     # ...for the Bead class   ...   †
 
 all_pos_xy = []     # (x, y) of bead in random walk
 all_vel_xy = []     # (vx, vy) of bead in random walk
@@ -50,7 +50,7 @@ class Bead:
 
     elif xs == None:
       x_force = Fx[j] * random.choice(parity) - k*self.x     # parity is random EACH time
-      y_force = Fy[j] * random.choice(parity) - k*self.y     # j - 1 vs j ???
+      y_force = Fy[j] * random.choice(parity) - k*self.y     # j - 1 vs j ???   ...   †parity no need...
     return (x_force, y_force)
 
 
