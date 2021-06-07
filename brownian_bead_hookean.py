@@ -8,7 +8,7 @@ import random
 # preamble
 
 parity = (-1, +1)
-N = 100001                               # N = number of steps
+N = 100001                             # N = number of steps
 Fx = np.random.normal(0.5, 0.2, N)     # random forces in the x-direction...
 Fy = np.random.normal(0.5, 0.2, N)     # ...for the Bead class   ...   †
 
