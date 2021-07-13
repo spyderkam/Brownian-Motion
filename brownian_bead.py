@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# 6/5/2021 — 7/7/2021
+# 6/5/2021 — 7/12/2021
 
 import numpy as np
 
@@ -23,7 +23,7 @@ Rg = []             # radius of gyration
 class Bead:
   """A 2D bead w/radius and initial position in Cartesian coordinates."""
 
-  def __init__(self, x=0, y=0, r=.08):
+  def __init__(self, x=0, y=0, r=.04):     # try halfing r cuz this would make much more sense   .08 vs .04
     self.x = x     # x position of bead's center
     self.y = y     # y position of bead's center
     self.pos = (self.x, self.y)
@@ -88,14 +88,14 @@ class Bead:
     return (x_force, y_force)
 
 
-  def advance(self, Δt, b=1, κ=0, κ_ev=0):     # κ instead of k just in case the kernel gets confused
+  def advance(self, Δt, b=1, κ=0):     # κ instead of k just in case the kernel gets confused
     """Advance the beads's position based on ΣF."""
 
     positions_xy = [(self.x, self.y)]     # initialize
 
     for i in range(N-1):     # len()-1 cuz already have the initial entry
-      self.x = self.x + (self.force_calculate(k=κ, k_ev=κ_ev, j=i)[0] / b)*Δt          # advance position
-      self.y = self.y + (self.force_calculate(k=κ, k_ev=κ_ev, j=i)[1] / b)*Δt          # x[i] = x[i-1] + (F[i]/b)*Δt
+      self.x = self.x + (self.force_calculate(k=κ, j=i)[0] / b)*Δt          # advance position
+      self.y = self.y + (self.force_calculate(k=κ, j=i)[1] / b)*Δt          # x[i] = x[i-1] + (F[i]/b)*Δt
 
       positions_xy.append( (self.x, self.y) )                               # store the advanced positions
     all_pos_xy.append(positions_xy)           # append current bead pos in all_pos_xy
@@ -108,7 +108,7 @@ class Simulation:
   """Simulation class based on Bead class."""
   def __init__(self, nbeads, x=0, y=0, vx=0, vy=0):
     self.nbeads = nbeads
-    self.beads = [self.init_bead(x=i*.09, y=0) for i in range(nbeads)]     # i vs 0
+    self.beads = [self.init_bead(x=i*.09, y=0) for i in range(nbeads)]     # .09 to not [possibly] blow up w/lk & ls
 
     global Fx_sim     # global forces for simulation
     global Fy_sim
@@ -125,7 +125,7 @@ class Simulation:
     return Bead(x, y)
 
 
-  def advance(self, Δt, b=1, κ=0, κ_ev=0):
+  def advance(self, Δt, b=1, κ_ev=0):
     """Advance the simulation."""
     global xs   # not sure why but must globalize to reflect global change
     global ys
@@ -147,8 +147,8 @@ class Simulation:
 
     for i in range(N-1):
       for n, bead in enumerate(self.beads):
-        bead.x = bead.x + (bead.force_calculate(k=κ, k_ev=κ_ev, j=n, jj=i, Ls=.5, lk=.1)[0] / b)*Δt
-        bead.y = bead.y + (bead.force_calculate(k=κ, k_ev=κ_ev, j=n, jj=i, Ls=.5, lk=.1)[1] / b)*Δt
+        bead.x = bead.x + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=.5, lk=.1)[0] / b)*Δt   #LS=1!!!!!!!!
+        bead.y = bead.y + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=.5, lk=.1)[1] / b)*Δt
 
         xj.append(bead.x); yj.append(bead.y)
         all_sim_pos[n].append( (bead.x, bead.y) )
