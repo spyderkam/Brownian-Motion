@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# 6/5/2021 — 7/12/2021
+# 3/11/2021 — 8/4/2021
 
 import numpy as np
 
@@ -26,12 +26,11 @@ class Bead:
   def __init__(self, x=0, y=0, r=.04):     # try halfing r cuz this would make much more sense   .08 vs .04
     self.x = x     # x position of bead's center
     self.y = y     # y position of bead's center
-    self.pos = (self.x, self.y)
     self.r = r     # bead radius
 
-
-
   def force_calculate(self, j, jj=None, k=0, k_ev=0, Ls=None, kBT=1, lk=1):
+    """Compute the forces on each bead."""
+
     if xs != None:
       if j == 0:
         r = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
@@ -41,6 +40,11 @@ class Bead:
 
         x_force = Fx_sim[jj, j] - x_FENE
         y_force = Fy_sim[jj, j] - y_FENE
+
+        xj = np.delete(np.array(xs), j)
+        yj = np.delete(np.array(ys), j)
+        biscl_x = []     # list of (b)ead (i)nteraction (s)o-(c)alled '(l)engths'
+        biscl_y = []
       elif j == (len(xs) - 1):
         r = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
         FENE = (3*kBT/lk)*( (r/Ls) / (1 - (r/Ls)**2) )
@@ -49,6 +53,11 @@ class Bead:
 
         x_force = Fx_sim[jj, j] - x_FENE
         y_force = Fy_sim[jj, j] - y_FENE
+
+        xj = np.delete(np.array(xs), j)
+        yj = np.delete(np.array(ys), j)
+        biscl_x = []     # list of (b)ead (i)nteraction (s)o-(c)alled '(l)engths'
+        biscl_y = []
       else:
         r1 = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
         r2 = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
@@ -64,35 +73,39 @@ class Bead:
         x_force = Fx_sim[jj, j] - (x_FENE1 + x_FENE2)
         y_force = Fy_sim[jj, j] - (y_FENE1 + y_FENE2)
 
-      # new stuff
-      xj = list(set(xs) - set([self.x]))     # here xj is the temp list which...
-      yj = list(set(ys) - set([self.y]))     #... has all pos apart from self.x
+      xj = np.delete(np.array(xs), j)
+      yj = np.delete(np.array(ys), j)
       biscl_x = []     # list of (b)ead (i)nteraction (s)o-(c)alled '(l)engths'
       biscl_y = []
-      for index, xpos in enumerate(xj):
-        if abs(self.x - xj[index]) < 2*self.r:     # check if volume is excluded
-          biscl_x.append(abs(self.x - xj[index]))  # append if it is
-        #if abs(self.y - yj[index]) < 2*self.r:    ## not sure why these two...
-        #  biscl_y.append(abs(self.y - yj[index])) ## ...lines give error  :/
-      for ypos in yj:
-        if abs(self.y - ypos) < 2*self.r:
-          biscl_y.append(abs(self.y - ypos))
 
-      x_force = x_force + k_ev*np.sum(biscl_x)     # - vs +
-      y_force = y_force + k_ev*np.sum(biscl_y)
-      ###########
+      for index, xpos in enumerate(xj):
+        Δx = self.x - xj[index]
+        Δy = self.y - yj[index]
+        d = np.sqrt( Δx**2 + Δy**2 )
+
+        if d < 2*self.r:     # check if any volume is excluded
+          if Δx < 0:
+            biscl_x.append(abs(Δx) - 2*self.r)
+          elif Δx > 0:
+            biscl_x.append(2*self.r - Δx)
+
+          if Δy < 0:
+            biscl_y.append(abs(Δy) - 2*self.r)
+          elif Δy > 0:
+            biscl_y.append(2*self.r - Δy)
+
+      x_force = x_force + k_ev*np.sum(biscl_x)
+      y_force = y_force + k_ev*np.sum(biscl_y);
 
     elif xs == None:     # I guess this is just for simple Brownian motion
-      x_force = Fx[j] - k*self.x
-      y_force = Fy[j] - k*self.y
+      x_force = Fx[j] + k*self.x
+      y_force = Fy[j] + k*self.y
     return (x_force, y_force)
-
 
   def advance(self, Δt, b=1, κ=0):     # κ instead of k just in case the kernel gets confused
     """Advance the beads's position based on ΣF."""
 
     positions_xy = [(self.x, self.y)]     # initialize
-
     for i in range(N-1):     # len()-1 cuz already have the initial entry
       self.x = self.x + (self.force_calculate(k=κ, j=i)[0] / b)*Δt          # advance position
       self.y = self.y + (self.force_calculate(k=κ, j=i)[1] / b)*Δt          # x[i] = x[i-1] + (F[i]/b)*Δt
@@ -105,28 +118,29 @@ class Bead:
 
 ################  Simulation Class  ################
 class Simulation:
-  """Simulation class based on Bead class."""
+  """Basic simulation of Brownian polymer chain. Based on Bead class."""
+
   def __init__(self, nbeads, x=0, y=0, vx=0, vy=0):
     self.nbeads = nbeads
-    self.beads = [self.init_bead(x=i*.09, y=0) for i in range(nbeads)]     # .09 to not [possibly] blow up w/lk & ls
+    self.beads = [self.init_bead(x=i*.045, y=i*.045) for i in range(nbeads)]  # (i*.09,0) vs (i*.045,i*.045)
 
     global Fx_sim     # global forces for simulation
     global Fy_sim
 
-    Fx_sim = []
-    Fy_sim = []
+    Fx_sim = []     # initialize the Brownian forces...
+    Fy_sim = []     # ... making it = nbeads x N
     for i in range(N-1):     # N vs N-1
-      Fx_sim.append(np.random.normal(0, 1, nbeads))
-      Fy_sim.append(np.random.normal(0, 1, nbeads))
+      Fx_sim.append(np.random.normal(0, 100, nbeads))
+      Fy_sim.append(np.random.normal(0, 100, nbeads))
     Fx_sim = np.array(Fx_sim)
     Fy_sim = np.array(Fy_sim)
 
   def init_bead(self, x=0, y=0):
     return Bead(x, y)
 
-
   def advance(self, Δt, b=1, κ_ev=0):
     """Advance the simulation."""
+
     global xs   # not sure why but must globalize to reflect global change
     global ys
 
@@ -137,7 +151,7 @@ class Simulation:
     yj = []  # ... have advanced. Then set xs = xj so all beads advance at once
 
     for i in range(self.nbeads):
-      all_sim_pos.append([(i*.09,0)])     # [(0,0)] vs [] vs [(i,i)]
+      all_sim_pos.append([(i*.045,i*.045)])     # (i*.09,0) vs (i*.045,i*.045)
 
     for bead in self.beads:
       xs.append(bead.x)     # store all the init pos of the beads
@@ -147,8 +161,8 @@ class Simulation:
 
     for i in range(N-1):
       for n, bead in enumerate(self.beads):
-        bead.x = bead.x + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=.5, lk=.1)[0] / b)*Δt   #LS=1!!!!!!!!
-        bead.y = bead.y + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=.5, lk=.1)[1] / b)*Δt
+        bead.x = bead.x + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=.4, lk=.04, kBT=1)[0] / b)*Δt  # Ls=1, lk=.1
+        bead.y = bead.y + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=.4, lk=.04, kBT=1)[1] / b)*Δt  # Ls=.06 & lk=.04
 
         xj.append(bead.x); yj.append(bead.y)
         all_sim_pos[n].append( (bead.x, bead.y) )
@@ -162,10 +176,27 @@ class Simulation:
 
 if __name__ == '__main__':
   '''The Fundumentals'''
+
   import matplotlib; matplotlib.use('TkAgg')
   import matplotlib.pyplot as plt
   from scipy.optimize import curve_fit
 
+
+  Δt = .00001     # time step
+  t = []          # time array
+  tt = 0          # temp element of time array
+  for i in range(N):
+    t.append(tt)
+    tt += Δt
+
+  sim = Simulation(nbeads=2)
+  sim.advance(Δt, κ_ev=500)     # make κ_ev very big and play with it
+
+  Ree = []     # end to end radius; i.e., \sqrt{x^2 + y^2}
+  for xy in end_to_end:
+    Ree.append(np.sqrt(xy[0]**2 + xy[1]**2))
+
+  '''Some More Fundumentals'''
 
   def compute_MSD(positions_xy):
     totalsize = len(positions_xy)
@@ -178,19 +209,14 @@ if __name__ == '__main__':
         msd.append(np.sum( (positions_xy[j::] - positions_xy[0:-j])**2 ) / (totalsize -j))
     return np.array(msd)
 
-
-  Δt = 0.01     # time step
-  t = []        # time array
-  tt = 0        # element of time array
-  for i in range(N):
-    t.append(tt)
-    tt += Δt
-
-  sim0 = Simulation(nbeads=2)
-  sim0.advance(Δt, κ=1, κ_ev=5)     # make κ_ev very big and play with it
-
-  Ree = []     # end to end radius; i.e., \sqrt{x^2 + y^2}
-  for xy in end_to_end:
-    Ree.append(np.sqrt(xy[0]**2 + xy[1]**2))
+  all_x = []     # list containing all x positions of all beads at each time
+  all_y = []
+  for i, bead in enumerate(np.array(all_sim_pos)):
+    all_x.append([])     # append empty lists equal to the number of beads
+    all_y.append([])
+    for j, s in enumerate(bead):      # consider all the positions of each individual bead
+      all_x[i].append(bead[j, 0])     # append the x pos at each time (i.e., x pos at time j)
+      all_y[i].append(bead[j, 1])
+  # all_x and all_y lists now complete
 
   print("no obvious errors...")
