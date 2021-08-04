@@ -23,10 +23,10 @@ Rg = []             # radius of gyration
 class Bead:
   """A 2D bead w/radius and initial position in Cartesian coordinates."""
 
-  def __init__(self, x=0, y=0, r=.04):     # try halfing r cuz this would make much more sense   .08 vs .04
+  def __init__(self, x=0, y=0, r=.04): 
     self.x = x     # x position of bead's center
     self.y = y     # y position of bead's center
-    self.r = r     # bead radius
+    self.r = r     # bead's radius
 
   def force_calculate(self, j, jj=None, k=0, k_ev=0, Ls=None, kBT=1, lk=1):
     """Compute the forces on each bead."""
