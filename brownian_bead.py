@@ -23,7 +23,7 @@ Rg = []             # radius of gyration
 class Bead:
   """A 2D bead w/radius and initial position in Cartesian coordinates."""
 
-  def __init__(self, x=0, y=0, r=.04): 
+  def __init__(self, x=0, y=0, r=.04):
     self.x = x     # x position of bead's center
     self.y = y     # y position of bead's center
     self.r = r     # bead's radius
@@ -40,11 +40,6 @@ class Bead:
 
         x_force = Fx_sim[jj, j] - x_FENE
         y_force = Fy_sim[jj, j] - y_FENE
-
-        xj = np.delete(np.array(xs), j)
-        yj = np.delete(np.array(ys), j)
-        biscl_x = []     # list of (b)ead (i)nteraction (s)o-(c)alled '(l)engths'
-        biscl_y = []
       elif j == (len(xs) - 1):
         r = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
         FENE = (3*kBT/lk)*( (r/Ls) / (1 - (r/Ls)**2) )
@@ -53,11 +48,6 @@ class Bead:
 
         x_force = Fx_sim[jj, j] - x_FENE
         y_force = Fy_sim[jj, j] - y_FENE
-
-        xj = np.delete(np.array(xs), j)
-        yj = np.delete(np.array(ys), j)
-        biscl_x = []     # list of (b)ead (i)nteraction (s)o-(c)alled '(l)engths'
-        biscl_y = []
       else:
         r1 = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
         r2 = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
