@@ -40,6 +40,7 @@ class Bead:
 
         x_force = Fx_sim[jj, j] - x_FENE
         y_force = Fy_sim[jj, j] - y_FENE
+
       elif j == (len(xs) - 1):
         r = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
         FENE = (3*kBT/lk)*( (r/Ls) / (1 - (r/Ls)**2) )
@@ -48,6 +49,7 @@ class Bead:
 
         x_force = Fx_sim[jj, j] - x_FENE
         y_force = Fy_sim[jj, j] - y_FENE
+
       else:
         r1 = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
         r2 = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
@@ -63,7 +65,7 @@ class Bead:
         x_force = Fx_sim[jj, j] - (x_FENE1 + x_FENE2)
         y_force = Fy_sim[jj, j] - (y_FENE1 + y_FENE2)
 
-      xj = np.delete(np.array(xs), j)
+      xj = np.delete(np.array(xs), j)     # temp list w/all current pos - self.x
       yj = np.delete(np.array(ys), j)
       biscl_x = []     # list of (b)ead (i)nteraction (s)o-(c)alled '(l)engths'
       biscl_y = []
@@ -73,7 +75,7 @@ class Bead:
         Δy = self.y - yj[index]
         d = np.sqrt( Δx**2 + Δy**2 )
 
-        if d < 2*self.r:     # check if any volume is excluded
+        if d < 2*self.r:     # chek if any volume is excluded
           if Δx < 0:
             biscl_x.append(abs(Δx) - 2*self.r)
           elif Δx > 0:
@@ -112,7 +114,7 @@ class Simulation:
 
   def __init__(self, nbeads, x=0, y=0, vx=0, vy=0):
     self.nbeads = nbeads
-    self.beads = [self.init_bead(x=i*.045, y=i*.045) for i in range(nbeads)]  # (i*.09,0) vs (i*.045,i*.045)
+    self.beads = [self.init_bead(i*.09,0) for i in range(nbeads)]  # (i*.09,0) vs (i*⎷.09,i*⎷.09)
 
     global Fx_sim     # global forces for simulation
     global Fy_sim
@@ -141,7 +143,7 @@ class Simulation:
     yj = []  # ... have advanced. Then set xs = xj so all beads advance at once
 
     for i in range(self.nbeads):
-      all_sim_pos.append([(i*.045,i*.045)])     # (i*.09,0) vs (i*.045,i*.045)
+      all_sim_pos.append([(i*.09,0)])     # (i*.09,0) vs (i*.045,i*.045)
 
     for bead in self.beads:
       xs.append(bead.x)     # store all the init pos of the beads
@@ -170,7 +172,6 @@ if __name__ == '__main__':
   import matplotlib; matplotlib.use('TkAgg')
   import matplotlib.pyplot as plt
   from scipy.optimize import curve_fit
-
 
   Δt = .00001     # time step
   t = []          # time array
