@@ -8,7 +8,7 @@ import numpy as np
 
 # preamble
 
-N = 100001                         # N = number of time steps
+N = 1000001                        # N = number of time steps
 Fx = np.random.normal(0, 1, N)     # random forces in the x-direction...
 Fy = np.random.normal(0, 1, N)     # ...for the Bead class
 
@@ -152,9 +152,9 @@ class Simulation:
     Rg.append(np.sqrt(np.var(xs) + np.var(ys)))          # 1st Rg element
 
     for i in range(N-1):
-      for n, bead in enumerate(self.beads):
-        bead.x = bead.x + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=.4, lk=.04, kBT=1)[0] / b)*Δt  # Ls=1, lk=.1
-        bead.y = bead.y + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=.4, lk=.04, kBT=1)[1] / b)*Δt  # Ls=.06 & lk=.04
+      for n, bead in enumerate(self.beads):                                                           # Ls=1.5d0, lk=d0
+        bead.x = bead.x + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1)[0] / b)*Δt  # Ls=1, lk=.1
+        bead.y = bead.y + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1)[1] / b)*Δt  # Ls=.4 & lk=.04
 
         xj.append(bead.x); yj.append(bead.y)
         all_sim_pos[n].append( (bead.x, bead.y) )
@@ -169,11 +169,11 @@ class Simulation:
 if __name__ == '__main__':
   '''The Fundumentals'''
 
-  import matplotlib; matplotlib.use('TkAgg')
+  import matplotlib; matplotlib.use('TkAgg')     # try disabling if error
   import matplotlib.pyplot as plt
   from scipy.optimize import curve_fit
 
-  Δt = .00001     # time step
+  Δt = .0001      # time step
   t = []          # time array
   tt = 0          # temp element of time array
   for i in range(N):
