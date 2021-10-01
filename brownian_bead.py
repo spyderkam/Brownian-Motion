@@ -200,6 +200,7 @@ if __name__ == '__main__':
         msd.append(np.sum( (positions_xy[j::] - positions_xy[0:-j])**2 ) / (totalsize -j))
     return np.array(msd)
 
+  # creating individual lists containg only xdata and only ydata
   all_x = []     # list containing all x positions of all beads at each time
   all_y = []
   for i, bead in enumerate(np.array(all_sim_pos)):
