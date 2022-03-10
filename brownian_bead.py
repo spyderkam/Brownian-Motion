@@ -31,7 +31,7 @@ class Bead:
   def force_calculate(self, j, jj=None, k=0, k_ev=0, Ls=None, kBT=1, lk=1):
     """Compute the forces on each bead."""
 
-    if xs != None:
+    if xs != None:     # FENE spring force
       if j == 0:
         r = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
         FENE = (3*kBT/lk)*( (r/Ls) / (1 - (r/Ls)**2) )
@@ -70,7 +70,7 @@ class Bead:
       biscl_x = []     # list of (b)ead (i)nteraction (s)o-(c)alled '(l)engths'
       biscl_y = []
 
-      for index, xpos in enumerate(xj):
+      for index, xpos in enumerate(xj):     # repuslsion force
         Δx = self.x - xj[index]
         Δy = self.y - yj[index]
         d = np.sqrt( Δx**2 + Δy**2 )
@@ -87,7 +87,7 @@ class Bead:
             biscl_y.append(2*self.r - Δy)
 
       x_force = x_force + k_ev*np.sum(biscl_x)
-      y_force = y_force + k_ev*np.sum(biscl_y);
+      y_force = y_force + k_ev*np.sum(biscl_y)
 
     elif xs == None:     # I guess this is just for simple Brownian motion
       x_force = Fx[j] + k*self.x
