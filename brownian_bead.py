@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# 3/11/2021 — 8/4/2021
+# 3/11/2021 — 6/30/2022
 
 import numpy as np
 
@@ -8,7 +8,7 @@ import numpy as np
 
 # preamble
 
-N = 1000001                        # N = number of time steps
+N = 1500001                         # N = number of time steps (iterations)
 Fx = np.random.normal(0, 1, N)     # random forces in the x-direction...
 Fy = np.random.normal(0, 1, N)     # ...for the Bead class
 
@@ -31,7 +31,7 @@ class Bead:
   def force_calculate(self, j, jj=None, k=0, k_ev=0, Ls=None, kBT=1, lk=1):
     """Compute the forces on each bead."""
 
-    if xs != None:     # FENE spring force
+    if xs != None:
       if j == 0:
         r = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
         FENE = (3*kBT/lk)*( (r/Ls) / (1 - (r/Ls)**2) )
@@ -65,29 +65,30 @@ class Bead:
         x_force = Fx_sim[jj, j] - (x_FENE1 + x_FENE2)
         y_force = Fy_sim[jj, j] - (y_FENE1 + y_FENE2)
 
-      xj = np.delete(np.array(xs), j)     # temp list w/all current pos - self.x
-      yj = np.delete(np.array(ys), j)
-      biscl_x = []     # list of (b)ead (i)nteraction (s)o-(c)alled '(l)engths'
-      biscl_y = []
+      if k_ev:
+        xj = np.delete(np.array(xs), j)     # temp list w/all current pos - self.x
+        yj = np.delete(np.array(ys), j)
+        biscl_x = []     # list of (b)ead (i)nteraction (s)o-(c)alled '(l)engths'
+        biscl_y = []
 
-      for index, xpos in enumerate(xj):     # repuslsion force
-        Δx = self.x - xj[index]
-        Δy = self.y - yj[index]
-        d = np.sqrt( Δx**2 + Δy**2 )
+        for index, xpos in enumerate(xj):
+          Δx = self.x - xj[index]
+          Δy = self.y - yj[index]
+          d = np.sqrt( Δx**2 + Δy**2 )
 
-        if d < 2*self.r:     # chek if any volume is excluded
-          if Δx < 0:
-            biscl_x.append(abs(Δx) - 2*self.r)
-          elif Δx > 0:
-            biscl_x.append(2*self.r - Δx)
+          if d < 2*self.r:     # chek if any volume is excluded
+            if Δx < 0:
+                biscl_x.append(abs(Δx) - 2*self.r)
+            elif Δx > 0:
+                biscl_x.append(2*self.r - Δx)
 
-          if Δy < 0:
-            biscl_y.append(abs(Δy) - 2*self.r)
-          elif Δy > 0:
-            biscl_y.append(2*self.r - Δy)
+            if Δy < 0:
+              biscl_y.append(abs(Δy) - 2*self.r)
+            elif Δy > 0:
+              biscl_y.append(2*self.r - Δy)
 
-      x_force = x_force + k_ev*np.sum(biscl_x)
-      y_force = y_force + k_ev*np.sum(biscl_y)
+        x_force = x_force + k_ev*np.sum(biscl_x)
+        y_force = y_force + k_ev*np.sum(biscl_y);
 
     elif xs == None:     # I guess this is just for simple Brownian motion
       x_force = Fx[j] + k*self.x
@@ -112,7 +113,7 @@ class Bead:
 class Simulation:
   """Basic simulation of Brownian polymer chain. Based on Bead class."""
 
-  def __init__(self, nbeads, x=0, y=0, vx=0, vy=0):
+  def __init__(self, nbeads, x=0, y=0):
     self.nbeads = nbeads
     self.beads = [self.init_bead(i*.09,0) for i in range(nbeads)]  # (i*.09,0) vs (i*⎷.09,i*⎷.09)
 
@@ -183,7 +184,7 @@ if __name__ == '__main__':
   sim = Simulation(nbeads=2)
   sim.advance(Δt, κ_ev=500)     # make κ_ev very big and play with it
 
-  Ree = []     # end to end radius; i.e., \sqrt{x^2 + y^2}
+  Ree = []     # end-to-end radius; i.e., \sqrt{x^2 + y^2}
   for xy in end_to_end:
     Ree.append(np.sqrt(xy[0]**2 + xy[1]**2))
 
@@ -200,7 +201,6 @@ if __name__ == '__main__':
         msd.append(np.sum( (positions_xy[j::] - positions_xy[0:-j])**2 ) / (totalsize -j))
     return np.array(msd)
 
-  # creating individual lists containg only xdata and only ydata
   all_x = []     # list containing all x positions of all beads at each time
   all_y = []
   for i, bead in enumerate(np.array(all_sim_pos)):
