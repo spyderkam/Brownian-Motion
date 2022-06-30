@@ -1,0 +1,1 @@
+`brownian_bead_hookean.py` is similar to `brownian_bead.py` but it replaces the FENE spring with a standard Hookean spring and it does *not* included the excluded volume force. The accompanying scripts from the main branch, `run.py` and `vis.py`, *should* also work with `brownian_bead_hookean.py`.
