@@ -1,4 +1,4 @@
-#https://stackoverflow.com/questions/49835134/matplotlib-animate-multiple-scatter-plots
+#!/usr/bim/env python3
 
 from brownian_bead import *
 import matplotlib; matplotlib.use('TkAgg')
@@ -31,7 +31,6 @@ def update(i, scatterplot, positions):
 
 fig = plt.figure()
 
-# https://stackoverflow.com/questions/33094509/correct-sizing-of-markers-in-scatter-plot-to-a-radius-r-in-matplotlib
 plt.xlim(-.01, (beads-1)*.09 + .01)     # -.06, .14 good for 2 beads
 plt.ylim(-.2, .2)                     # -.75, .75 good for 2 beads
 
@@ -50,3 +49,9 @@ anim.save(f, writer=writervideo)
 plt.show()
 
 
+
+"""
+Recources
+[1] https://stackoverflow.com/questions/49835134/matplotlib-animate-multiple-scatter-plots
+[2] https://stackoverflow.com/questions/33094509/correct-sizing-of-markers-in-scatter-plot-to-a-radius-r-in-matplotlib
+"""
