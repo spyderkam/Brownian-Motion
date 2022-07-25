@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# 3/11/2021 — 6/30/2022
+# 3/11/2021 — 7/25/2022
 
 import numpy as np
 
@@ -8,7 +8,7 @@ import numpy as np
 
 # preamble
 
-N = 1500001                         # N = number of time steps (iterations)
+N = 10001                        # N = number of time steps (iterations)
 Fx = np.random.normal(0, 1, N)     # random forces in the x-direction...
 Fy = np.random.normal(0, 1, N)     # ...for the Bead class
 
@@ -76,17 +76,10 @@ class Bead:
           Δy = self.y - yj[index]
           d = np.sqrt( Δx**2 + Δy**2 )
 
-          if d < 2*self.r:     # chek if any volume is excluded
-            if Δx < 0:
-                biscl_x.append(abs(Δx) - 2*self.r)
-            elif Δx > 0:
-                biscl_x.append(2*self.r - Δx)
-
-            if Δy < 0:
-              biscl_y.append(abs(Δy) - 2*self.r)
-            elif Δy > 0:
-              biscl_y.append(2*self.r - Δy)
-
+          if d < Ls/1.336:     # check if any volume is excluded
+            biscl_x.append((Ls/1.336 - d) * Δx/d)
+            biscl_y.append((Ls/1.336 - d) * Δy/d)
+              
         x_force = x_force + k_ev*np.sum(biscl_x)
         y_force = y_force + k_ev*np.sum(biscl_y);
 
