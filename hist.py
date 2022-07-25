@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 nbeads = 20
 k_ev = 200
 
-arr = np.load(f'pos_data/nbeads{nbeads}-k_ev{k_ev}_a.npy')  
+arr = np.load(f'pos_data/nbeads{nbeads}-k_ev{k_ev}.npy')  
 N = len(arr[0])
 
 select_cos_arr = []; 
@@ -40,5 +40,5 @@ plt.hist(select_cos_arr, bins=50)
 plt.xlabel(r"${\gamma}$", fontsize=20) # \cos{\gamma}
 plt.ylabel("frequency", fontsize=20)
 plt.tight_layout()
-plt.savefig(f"pos_data/pics/k_ev{k_ev}nbeads{nbeads}_histogram_c.png", bbox_inches='tight')
+plt.savefig(f"pos_data/pics/k_ev{k_ev}nbeads{nbeads}_histogram.png", bbox_inches='tight')
 plt.show()
