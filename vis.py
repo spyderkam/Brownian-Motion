@@ -1,4 +1,4 @@
-#!/usr/bim/env python3
+#!/usr/bin/env python3
 
 from brownian_bead import *
 import matplotlib; matplotlib.use('TkAgg')
