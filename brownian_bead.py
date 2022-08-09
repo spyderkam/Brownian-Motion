@@ -8,7 +8,7 @@ import numpy as np
 
 # preamble
 
-N = 10001                        # N = number of time steps (iterations)
+N = 1500001                        # N = number of time steps (iterations)
 Fx = np.random.normal(0, 1, N)     # random forces in the x-direction...
 Fy = np.random.normal(0, 1, N)     # ...for the Bead class
 
