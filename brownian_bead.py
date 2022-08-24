@@ -88,13 +88,13 @@ class Bead:
       y_force = Fy[j] + k*self.y
     return (x_force, y_force)
 
-  def advance(self, Δt, cd=1, κ=0):     # κ instead of k just in case the kernel gets confused
+  def advance(self, Δt, b=1, κ=0):     # κ instead of k just in case the kernel gets confused
     """Advance the beads's position based on ΣF."""
 
     positions_xy = [(self.x, self.y)]     # initialize
     for i in range(N-1):     # len()-1 cuz already have the initial entry
-      self.x = self.x + (self.force_calculate(k=κ, j=i)[0] / cd)*Δt          # advance position
-      self.y = self.y + (self.force_calculate(k=κ, j=i)[1] / cd)*Δt          # x[i] = x[i-1] + (F[i]/b)*Δt
+      self.x = self.x + (self.force_calculate(k=κ, j=i)[0] / b)*Δt          # advance position
+      self.y = self.y + (self.force_calculate(k=κ, j=i)[1] / b)*Δt          # x[i] = x[i-1] + (F[i]/b)*Δt
 
       positions_xy.append( (self.x, self.y) )                               # store the advanced positions
     all_pos_xy.append(positions_xy)           # append current bead pos in all_pos_xy
@@ -124,7 +124,7 @@ class Simulation:
   def init_bead(self, x=0, y=0):
     return Bead(x, y)
 
-  def advance(self, Δt, cd=1, κ_ev=0):
+  def advance(self, Δt, b=1, κ_ev=0):
     """Advance the simulation."""
 
     global xs   # not sure why but must globalize to reflect global change
@@ -147,8 +147,8 @@ class Simulation:
 
     for i in range(N-1):
       for n, bead in enumerate(self.beads):                                                           # Ls=1.5d0, lk=d0
-        bead.x = bead.x + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1)[0] / cd)*Δt  # Ls=1, lk=.1
-        bead.y = bead.y + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1)[1] / cd)*Δt  # Ls=.4 & lk=.04
+        bead.x = bead.x + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1)[0] / b)*Δt  # Ls=1, lk=.1
+        bead.y = bead.y + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1)[1] / b)*Δt  # Ls=.4 & lk=.04
 
         xj.append(bead.x); yj.append(bead.y)
         all_sim_pos[n].append( (bead.x, bead.y) )
