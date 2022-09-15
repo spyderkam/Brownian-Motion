@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# 3/11/2021 — 7/25/2022
+# 3/11/2021 — 9/7/2022
 
 import numpy as np
 
@@ -8,7 +8,7 @@ import numpy as np
 
 # preamble
 
-N = 1500001                        # N = number of time steps (iterations)
+N = 2000001                        # N = number of time steps (iterations)
 Fx = np.random.normal(0, 1, N)     # random forces in the x-direction...
 Fy = np.random.normal(0, 1, N)     # ...for the Bead class
 
@@ -28,42 +28,63 @@ class Bead:
     self.y = y     # y position of bead's center
     self.r = r     # bead's radius
 
-  def force_calculate(self, j, jj=None, k=0, k_ev=0, Ls=None, kBT=1, lk=1):
+  def force_calculate(self, j, jj=None, k=0, k_ev=0, Ls=None, kBT=1, lk=1, conf='linear'):
     """Compute the forces on each bead."""
 
     if xs != None:
-      if j == 0:
-        r = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
-        FENE = (3*kBT/lk)*( (r/Ls) / (1 - (r/Ls)**2) )
-        x_FENE = FENE * (self.x - xs[j+1])/r     # FENE * cos(θ)
-        y_FENE = FENE * (self.y - ys[j+1])/r     # FENE * sin(θ)
-
-        x_force = Fx_sim[jj, j] - x_FENE
-        y_force = Fy_sim[jj, j] - y_FENE
-
-      elif j == (len(xs) - 1):
-        r = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
-        FENE = (3*kBT/lk)*( (r/Ls) / (1 - (r/Ls)**2) )
-        x_FENE = FENE * (self.x - xs[j-1])/r     # FENE * cos(φ)
-        y_FENE = FENE * (self.y - ys[j-1])/r     # FENE * sin(φ)
-
-        x_force = Fx_sim[jj, j] - x_FENE
-        y_force = Fy_sim[jj, j] - y_FENE
-
-      else:
+      if conf == 'circular':
         r1 = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
-        r2 = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
-
-        FENE1 = (3*kBT/lk)*( (r1/Ls) / (1 - (r1/Ls)**2) )
-        FENE2 = (3*kBT/lk)*( (r2/Ls) / (1 - (r2/Ls)**2) )
-
+        if j == (len(xs) - 1):
+          r2 = np.sqrt( (self.x - xs[0])**2 + (self.y - ys[0])**2 )
+          FENE2 = (3*kBT/lk)*( (r2/Ls) / (1 - (r2/Ls)**2) )
+          x_FENE2 = FENE2 * (self.x - xs[0])/r2     # FENE2 * cos(θ)
+          y_FENE2 = FENE2 * (self.y - ys[0])/r2     # FENE2 * sin(θ)
+        else:
+          r2 = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
+          FENE2 = (3*kBT/lk)*( (r2/Ls) / (1 - (r2/Ls)**2) )
+          x_FENE2 = FENE2 * (self.x - xs[j+1])/r2     # FENE2 * cos(θ)
+          y_FENE2 = FENE2 * (self.y - ys[j+1])/r2     # FENE2 * sin(θ)
+        
+        FENE1 = (3*kBT/lk)*( (r1/Ls) / (1 - (r1/Ls)**2) )     
         x_FENE1 = FENE1 * (self.x - xs[j-1])/r1     # FENE1 * cos(φ)
         y_FENE1 = FENE1 * (self.y - ys[j-1])/r1     # FENE1 * sin(φ)
-        x_FENE2 = FENE2 * (self.x - xs[j+1])/r2     # FENE2 * cos(θ)
-        y_FENE2 = FENE2 * (self.y - ys[j+1])/r2     # FENE2 * sin(θ)
 
         x_force = Fx_sim[jj, j] - (x_FENE1 + x_FENE2)
         y_force = Fy_sim[jj, j] - (y_FENE1 + y_FENE2)
+
+      elif conf == 'linear':
+        if j == 0:
+          r = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
+          FENE = (3*kBT/lk)*( (r/Ls) / (1 - (r/Ls)**2) )
+          x_FENE = FENE * (self.x - xs[j+1])/r     # FENE * cos(θ)
+          y_FENE = FENE * (self.y - ys[j+1])/r     # FENE * sin(θ)
+
+          x_force = Fx_sim[jj, j] - x_FENE
+          y_force = Fy_sim[jj, j] - y_FENE
+
+        elif j == (len(xs) - 1):
+          r = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
+          FENE = (3*kBT/lk)*( (r/Ls) / (1 - (r/Ls)**2) )
+          x_FENE = FENE * (self.x - xs[j-1])/r     # FENE * cos(φ)
+          y_FENE = FENE * (self.y - ys[j-1])/r     # FENE * sin(φ)
+
+          x_force = Fx_sim[jj, j] - x_FENE
+          y_force = Fy_sim[jj, j] - y_FENE
+
+        else:
+          r1 = np.sqrt( (self.x - xs[j-1])**2 + (self.y - ys[j-1])**2 )
+          r2 = np.sqrt( (self.x - xs[j+1])**2 + (self.y - ys[j+1])**2 )
+
+          FENE1 = (3*kBT/lk)*( (r1/Ls) / (1 - (r1/Ls)**2) )
+          FENE2 = (3*kBT/lk)*( (r2/Ls) / (1 - (r2/Ls)**2) )
+
+          x_FENE1 = FENE1 * (self.x - xs[j-1])/r1     # FENE1 * cos(φ)
+          y_FENE1 = FENE1 * (self.y - ys[j-1])/r1     # FENE1 * sin(φ)
+          x_FENE2 = FENE2 * (self.x - xs[j+1])/r2     # FENE2 * cos(θ)
+          y_FENE2 = FENE2 * (self.y - ys[j+1])/r2     # FENE2 * sin(θ)
+
+          x_force = Fx_sim[jj, j] - (x_FENE1 + x_FENE2)
+          y_force = Fy_sim[jj, j] - (y_FENE1 + y_FENE2)
 
       if k_ev:
         xj = np.delete(np.array(xs), j)     # temp list w/all current pos - self.x
@@ -106,9 +127,17 @@ class Bead:
 class Simulation:
   """Basic simulation of Brownian polymer chain. Based on Bead class."""
 
-  def __init__(self, nbeads, x=0, y=0):
+  def __init__(self, nbeads, x=0, y=0, conf='linear'):
     self.nbeads = nbeads
-    self.beads = [self.init_bead(i*.09,0) for i in range(nbeads)]  # (i*.09,0) vs (i*⎷.09,i*⎷.09)
+    self.conf = conf
+
+    if conf == 'circular':
+      self.ψ = (2*np.pi)/nbeads     # initial angle between beads
+      self.ρ= 0.09/self.ψ               # radius = (0.09*nbeads)/(2*np.pi)
+      self.beads = [self.init_bead(self.ρ*np.cos(self.ψ*i), self.ρ*np.sin(self.ψ*i)) for i in range(nbeads)]
+    
+    elif conf == 'linear':
+       self.beads = [self.init_bead(i*.09,0) for i in range(nbeads)]
 
     global Fx_sim     # global forces for simulation
     global Fy_sim
@@ -137,7 +166,10 @@ class Simulation:
     yj = []  # ... have advanced. Then set xs = xj so all beads advance at once
 
     for i in range(self.nbeads):
-      all_sim_pos.append([(i*.09,0)])     # (i*.09,0) vs (i*.045,i*.045)
+      if self.conf == 'circular':
+        all_sim_pos.append([(self.ρ*np.cos(self.ψ*i), self.ρ*np.sin(self.ψ*i))])
+      elif self.conf == 'linear':
+        all_sim_pos.append([(i*.09,0)]) 
 
     for bead in self.beads:
       xs.append(bead.x)     # store all the init pos of the beads
@@ -147,8 +179,8 @@ class Simulation:
 
     for i in range(N-1):
       for n, bead in enumerate(self.beads):                                                           # Ls=1.5d0, lk=d0
-        bead.x = bead.x + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1)[0] / b)*Δt  # Ls=1, lk=.1
-        bead.y = bead.y + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1)[1] / b)*Δt  # Ls=.4 & lk=.04
+        bead.x = bead.x + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1, conf=self.conf)[0] / b)*Δt  # Ls=1, lk=.1
+        bead.y = bead.y + (bead.force_calculate(k_ev=κ_ev, j=n, jj=i, Ls=1, lk=.1, kBT=1, conf=self.conf)[1] / b)*Δt  # Ls=.4 & lk=.04
 
         xj.append(bead.x); yj.append(bead.y)
         all_sim_pos[n].append( (bead.x, bead.y) )
