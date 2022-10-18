@@ -11,9 +11,9 @@ import brownian_bead as bb
 import numpy as np
 import os
 
-nbeads_lst = (25,)
+nbeads_lst = (90, 100)
 k_ev = 200
-
+configuration = "circular"
 Δt = .0001
 t = []
 tt = 0
@@ -23,9 +23,9 @@ for i in range(bb.N):
 
 
 for nbeads in nbeads_lst:
-    print(f"[a] Simulating ideal chain: {nbeads} beads, N = {bb.N}, Δt = {Δt}, k_ev = {k_ev}")
+    print(f"[a] Simulating {configuration} chain: {nbeads} beads, N = {bb.N}, Δt = {Δt}, k_ev = {k_ev}")
 
-    sim = bb.Simulation(nbeads)
+    sim = bb.Simulation(nbeads, conf=configuration)
     sim.advance(Δt, κ_ev=k_ev)
 
 
@@ -33,9 +33,9 @@ for nbeads in nbeads_lst:
     print("[b] Saving coordinates")
 
     array0 = np.array(bb.all_sim_pos)
-    with open(f'pos_data/nbeads{nbeads}-k_ev{k_ev}.npy', 'wb') as f:
+    with open(f'pos_data/data/circular/k_ev=200/nbeads{nbeads}-k_ev{k_ev}.npy', 'wb') as f:
         np.save(f, array0)
-    array1 = np.load(f'pos_data/nbeads{nbeads}-k_ev{k_ev}.npy')
+    array1 = np.load(f'pos_data/data/circular/k_ev=200/nbeads{nbeads}-k_ev{k_ev}.npy')
 
     # make sure arrays are the same
     comparison = (array0 == array1)     # don't need parantheses
@@ -51,7 +51,7 @@ for nbeads in nbeads_lst:
 
     print("[c] Writing Rg & Ree")
 
-    file = open(f"simulated_data/ave_rg_ree_n{nbeads}-k_ev{k_ev}.dat", "w")  # "a" vs "w"
+    file = open(f"simulated_data/circular/k_ev=200/ave_rg_ree_n{nbeads}-k_ev{k_ev}.dat", "w")  # "a" vs "w"
     for i, s in enumerate(bb.Rg):
 
         a = str( bb.Rg[i] )
