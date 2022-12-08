@@ -26,7 +26,7 @@ class Bead:
   def __init__(self, x=0, y=0, r=.04):
     self.x = x     # x position of bead's center
     self.y = y     # y position of bead's center
-    self.r = r     # bead's radius
+    self.r = r     # bead's radius, best not to play with this
 
   def force_calculate(self, j, jj=None, k=0, k_ev=0, Ls=None, kBT=1, lk=1, conf='linear'):
     """Compute the forces on each bead."""
@@ -133,7 +133,7 @@ class Simulation:
 
     if conf == 'circular':
       self.ψ = (2*np.pi)/nbeads     # initial angle between beads
-      self.ρ= 0.09/self.ψ               # radius = (0.09*nbeads)/(2*np.pi)
+      self.ρ= 0.09/self.ψ           # radius = (0.09*nbeads)/(2*np.pi)
       self.beads = [self.init_bead(self.ρ*np.cos(self.ψ*i), self.ρ*np.sin(self.ψ*i)) for i in range(nbeads)]
     
     elif conf == 'linear':
