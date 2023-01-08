@@ -207,7 +207,7 @@ if __name__ == '__main__':
     tt += Δt
 
   sim = Simulation(nbeads=2)
-  sim.advance(Δt, κ_ev=500)     # make κ_ev very big and play with it
+  sim.advance(Δt, κ_ev=200)     # κ_ev = 200 seems optimal
 
   Ree = []     # end-to-end radius; i.e., \sqrt{x^2 + y^2}
   for xy in end_to_end:
