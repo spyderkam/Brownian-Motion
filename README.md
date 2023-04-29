@@ -8,3 +8,7 @@ Bead class to define Brownian particles. Simulation class based on Bead class fo
   * `run.py` executes `brownian_bead` simulation(s) and saves the coordinates, radius of gyration, and end-to-end radius of the polymer chain.
 
   * `hist.py` plots histogram of the angle distribution of the chain at different points in time.
+  
+  
+  #### TCPP
+  `TCPP.pdf` is my master's thesis which is based on my professor's program for a discrete worm-like chain, the `rpbd` repository, and largely this repository.
