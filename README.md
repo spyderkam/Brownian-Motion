@@ -11,4 +11,4 @@ Bead class to define Brownian particles. Simulation class based on Bead class fo
   
   
   #### TCPP
-  `TCPP.pdf` is my (unofficial) master's thesis which is based on my professor's program for a discrete worm-like chain, the `rpbd` repository, and largely this repository.
+  `TCPP.pdf` is my (unofficial) master's thesis which is based on my professor's program for a discrete worm-like chain, the [rpbd](https://github.com/spyderkam/rpbd/blob/master/arp.py) repository, and largely this repository.
