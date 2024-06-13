@@ -223,7 +223,7 @@ if __name__ == '__main__':
       j = i + 1
 
       if totalsize != j:     # don't want a division by zero in class method
-        msd.append(np.sum( (positions_xy[j::] - positions_xy[0:-j])**2 ) / (totalsize -j))
+        msd.append(np.sum((positions_xy[j::] - positions_xy[0:-j])**2) / (totalsize -j))
     return np.array(msd)
 
   all_x = []     # list containing all x positions of all beads at each time
