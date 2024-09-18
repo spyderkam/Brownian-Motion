@@ -197,7 +197,7 @@ if __name__ == '__main__':
 
   import matplotlib; matplotlib.use('TkAgg')     # try disabling if error
   import matplotlib.pyplot as plt
-  from scipy.optimize import curve_fit
+  #from scipy.optimize import curve_fit
 
   Δt = .0001      # time step
   t = []          # time array
