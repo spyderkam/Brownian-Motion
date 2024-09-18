@@ -187,7 +187,7 @@ class Simulation:
       xs = xj; ys = yj       # advance all at once
       xj = []; yj = []       # reset to advance all at once next time
       end_to_end.append((xs[-1] - xs[0], ys[-1] - ys[0]))   # e2e @ each time
-      Rg.append(np.sqrt(np.var(xs) + np.var(ys)))           # Rg @ each time; Rg^2 would be better for computation time
+      Rg.append(np.sqrt(np.var(xs) + np.var(ys)))           # Rg @ each time; Rg^2 would be much better for computation time
     xs = None; ys = None     # reset xs and ys to
 ###############################################################################
 
@@ -205,6 +205,7 @@ if __name__ == '__main__':
   for i in range(N):
     t.append(tt)
     tt += Δt
+  del tt
 
   sim = Simulation(nbeads=2)
   sim.advance(Δt, κ_ev=200)     # κ_ev = 200 seems optimal
