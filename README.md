@@ -1,17 +1,104 @@
-# README (readme needs updating)
+# Brownian Motion Polymer Chain Simulation
 
-Bead class to define Brownian particles. Simulation class based on Bead class for multi-Bead simulations.
+A Python-based simulation of Brownian motion for polymer chains, focusing on studying chain dynamics through metrics like radius of gyration (Rg) and end-to-end distance (Ree).
 
-<!--- * `brownian_bead_FENE` is also a simulation for the ideal chain/Rouse model but for a FENE force spring (see Wiki); which is what is ultimately desired. --->
-  * `brownian_bead.py` is the code which simulates a linear polymer chain with Brownian forces, FENE force, and optional excluded volume force; no HI force.
+## Overview
 
-  * `run.py` executes `brownian_bead` simulation(s) and saves the coordinates, radius of gyration, and end-to-end radius of the polymer chain.
+This project simulates the behavior of polymer chains using Brownian dynamics, allowing for both linear and circular chain configurations. The simulation accounts for various physical interactions including FENE (Finitely Extensible Nonlinear Elastic) potential and volume exclusion.
 
-  * `hist.py` plots histogram of the angle distribution of the chain at different points in time.
-  
-  
-  
-  ***
-  
-  ### TCPP
-  `TCPP.pdf` is my unofficial *master's thesis* which is based on my professor's program for a discrete worm-like chain, the [rpbd](https://github.com/spyderkam/rpbd/blob/master/arp.py) repository, and (mostly) this repository.
+## Core Features
+
+- Multiple chain configurations supported:
+  - Linear chains
+  - Circular chains
+- Configurable parameters:
+  - Number of beads (tested from 5 to 100 beads)
+  - Time steps (default N = 2,000,001)
+  - Time step size (Δt = 0.0001)
+  - Volume exclusion strength (k_ev, optimal at 200)
+- Analysis capabilities:
+  - Radius of gyration (Rg) calculation
+  - End-to-end distance (Ree) measurement
+  - Mean Square Displacement (MSD) computation
+  - Relaxation time (τ) extraction
+
+## Project Structure
+
+```
+project/
+│
+├── brownian_bead.py    # Core simulation engine
+├── run.py             # Script for running simulations and saving data
+└── auto-extract.ipynb # Analysis notebook for processing results
+```
+
+### File Descriptions
+
+#### brownian_bead.py
+- Main simulation engine
+- Contains `Bead` and `Simulation` classes
+- Implements force calculations and position updates
+- Handles both linear and circular chain configurations
+
+#### run.py
+- Executes simulations for specified chain lengths
+- Saves position data and metrics (Rg & Ree) to files
+- Supports batch processing of multiple chain lengths
+
+#### auto-extract.ipynb
+- Jupyter notebook for data analysis
+- Extracts relaxation times (τ)
+- Calculates average Rg and Ree after relaxation
+- Includes various data processing options (e.g., 85/15 split for analysis)
+
+## Usage
+
+1. Set up simulation parameters in `brownian_bead.py`:
+```python
+N = 2000001  # Number of time steps
+Δt = 0.0001  # Time step size
+```
+
+2. Run simulation using `run.py`:
+```python
+python run.py
+```
+
+3. Analyze results using `auto-extract.ipynb`
+
+## Implementation Details
+
+### Force Calculations
+- FENE potential for chain connectivity
+- Volume exclusion interactions between beads
+- Random Brownian forces in x and y directions
+
+### Data Storage
+- Position data saved in numpy format
+- Metrics (Rg & Ree) saved in text files
+- Organized directory structure for different configurations
+
+### Analysis Methods
+- Exponential decay fitting for relaxation times
+- Statistical averaging of steady-state properties
+- Various time window options for data analysis (5/95, 15/85, 25/75 splits)
+
+## Requirements
+
+- Python 3.10 or higher
+- NumPy
+- Matplotlib
+- SciPy
+- Jupyter (for analysis notebook)
+- TkAgg backend for matplotlib (configurable)
+
+## Notes
+
+- Default volume exclusion strength (k_ev = 200) has been optimized through testing
+- The simulation supports both single and multiple trial runs
+- Data analysis typically focuses on the final 85% of simulation time
+- Position data can be quite large due to the number of time steps
+
+## Author
+
+spyderkam (March 11, 2021 - September 7, 2022)
