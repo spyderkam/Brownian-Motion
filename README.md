@@ -28,8 +28,8 @@ This project simulates the behavior of polymer chains using Brownian dynamics, a
 project/
 │
 ├── brownian_bead.py    # Core simulation engine
-├── run.py             # Script for running simulations and saving data
-└── auto-extract.ipynb # Analysis notebook for processing results
+├── run.py              # Script for running simulations and saving data
+└── auto-extract.ipynb  # Analysis notebook for processing results
 ```
 
 ### File Descriptions
