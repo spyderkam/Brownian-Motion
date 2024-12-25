@@ -12,6 +12,7 @@ The simulation is based on the overdamped Langevin equation, which models the mo
 
 The key equation governing the bead motion is:
 
+
 ```
 dx/dt = ∑F/b
 ```
@@ -102,6 +103,14 @@ The simulation outputs several physical quantities:
 - No hydrodynamic interactions
 - Limited to single chain dynamics
 
+## Contributing
+
+Feel free to open issues or submit pull requests for:
+
+- New features
+- Documentation improvements
+- Performance optimizations
+
 ## License
 
-[Add your license information here]
+This project is licensed under the MIT License. See the (LICENSE)[https://github.com/spyderkam/brownian-motion/blob/main/LICENSE] file for details.
