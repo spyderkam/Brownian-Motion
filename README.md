@@ -113,4 +113,4 @@ Feel free to open issues or submit pull requests for:
 
 ## License
 
-This project is licensed under the MIT License. See the (LICENSE)[https://github.com/spyderkam/brownian-motion/blob/main/LICENSE] file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/spyderkam/brownian-motion/blob/main/LICENSE) file for details.
