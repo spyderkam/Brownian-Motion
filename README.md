@@ -18,9 +18,9 @@ dx/dt = ∑F/b
 ```
 
 where:
-- x is position
-- F represents the sum of forces
-- b is the drag coefficient
+- `x` is position
+- `F` represents the sum of forces
+- `b` is the drag coefficient
 
 ## Features
 
