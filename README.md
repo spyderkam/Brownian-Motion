@@ -1,104 +1,107 @@
-# Brownian Motion Polymer Chain Simulation
+# Brownian Polymer Chain Simulation
 
-A Python-based simulation of Brownian motion for polymer chains, focusing on studying chain dynamics through metrics like radius of gyration (Rg) and end-to-end distance (Ree).
+A Python implementation to simulate single polymer chains using Brownian dynamics. The simulation models beads connected by springs under the influence of Brownian motion, excluded volume effects, and finitely extensible non-linear elastic (FENE) forces.
 
-## Overview
+## Physics Background
 
-This project simulates the behavior of polymer chains using Brownian dynamics, allowing for both linear and circular chain configurations. The simulation accounts for various physical interactions including FENE (Finitely Extensible Nonlinear Elastic) potential and volume exclusion.
+The simulation is based on the overdamped Langevin equation, which models the motion of particles in a fluid where inertial effects are negligible. The forces acting on each bead include:
 
-## Core Features
+- Random Brownian forces (thermal noise)
+- FENE spring forces between consecutive beads
+- Optional excluded volume forces between beads
 
-- Multiple chain configurations supported:
-  - Linear chains
-  - Circular chains
-- Configurable parameters:
-  - Number of beads (tested from $5$ to $100$ beads)
-  - Time steps (default $N = 2,\\\!000,\\\!001$)
-  - Time step size ($Δt = 0.0001$)
-  - Volume exclusion strength (`k_ev`, optimal at `200`)
-- Analysis capabilities:
-  - Radius of gyration ($R_{\mathrm{g}}$) calculation
-  - End-to-end distance ($R_{\mathrm{ee}}$) measurement
-  - Mean Square Displacement ($\mathrm{MSD}$) computation
-  - Relaxation time ($\tau$) extraction
-
-## Project Structure
+The key equation governing the bead motion is:
 
 ```
-project/
-│
-├── brownian_bead.py    # Core simulation engine
-├── run.py              # Script for running simulations and saving data
-└── auto-extract.ipynb  # Analysis notebook for processing results
+dx/dt = ∑F/b
 ```
 
-### File Descriptions
+where:
+- x is position
+- F represents the sum of forces
+- b is the drag coefficient
 
-#### brownian_bead.py
-- Main simulation engine
-- Contains `Bead` and `Simulation` classes
-- Implements force calculations and position updates
-- Handles both linear and circular chain configurations
+## Features
 
-#### run.py
-- Executes simulations for specified chain lengths
-- Saves position data and metrics ($R_{\mathrm{g}}$ & $R_{\mathrm{ee}}$) to files
-- Supports batch processing of multiple chain lengths
+- Simulates both linear and circular polymer chains
+- Configurable number of beads
+- Adjustable simulation parameters (time step, spring constants, etc.)
+- Calculates physical properties like:
+  - Radius of gyration
+  - End-to-end distance
+  - Mean square displacement
+- Supports different chain configurations:
+  - Ideal chains (no excluded volume)
+  - Real chains (with excluded volume)
+  - Circular chains (polymer rings)
 
-#### auto-extract.ipynb
-- Jupyter notebook for data analysis
-- Extracts relaxation times ($\tau$)
-- Calculates average $R_{\mathrm{g}}$ and $R_{\mathrm{ee}}$ after relaxation
-- Includes various data processing options (e.g., 85/15 split for analysis)
+## Installation
+
+1. Clone this repository:
+```bash
+git clone [repository-url]
+```
+
+2. Required dependencies:
+```bash
+pip install numpy matplotlib
+```
 
 ## Usage
 
-1. Set up simulation parameters in `brownian_bead.py`:
+The main classes are:
+
+### Bead Class
 ```python
-N = 2000001  # Number of time steps
-Δt = 0.0001  # Time step size
+bead = Bead(x=0, y=0, r=0.04)  # Create a bead at (0,0) with radius 0.04
 ```
 
-2. Run simulation using `run.py`:
+### Simulation Class
 ```python
-python run.py
+sim = Simulation(nbeads=10, conf='linear')  # Create a linear chain with 10 beads
+sim.advance(dt=0.0001, kappa_ev=200)  # Run simulation with excluded volume
 ```
 
-3. Analyze results using `auto-extract.ipynb`
+### Example
+```python
+import brownian_bead as bb
 
-## Implementation Details
+# Create and run a simple simulation
+sim = bb.Simulation(nbeads=2)
+sim.advance(dt=0.0001, kappa_ev=200)
 
-### Force Calculations
-- FENE potential for chain connectivity
-- Volume exclusion interactions between beads
-- Random Brownian forces in x and y directions
+# Access simulation results
+print(bb.Rg)  # Radius of gyration
+print(bb.end_to_end)  # End-to-end distances
+```
 
-### Data Storage
-- Position data saved in numpy format
-- Metrics (Rg & Ree) saved in text files
-- Organized directory structure for different configurations
+## Parameters
 
-### Analysis Methods
-- Exponential decay fitting for relaxation times
-- Statistical averaging of steady-state properties
-- Various time window options for data analysis (5/95, 15/85, 25/75 splits)
+Key simulation parameters:
 
-## Requirements
+- `dt`: Time step size (default: 0.0001)
+- `N`: Number of iterations (default: 2000001)
+- `kappa_ev`: Excluded volume constant (default: 200)
+- `b`: Drag coefficient (default: 1)
+- `Ls`: Maximum spring length (default: 1)
+- `lk`: Kuhn length (default: 0.1)
+- `kBT`: Temperature energy scale (default: 1)
 
-- Python 3.10 or higher
-- NumPy
-- Matplotlib
-- SciPy
-- Jupyter (for analysis notebook)
-- TkAgg backend for matplotlib (configurable)
+## Output
 
-## Notes
+The simulation outputs several physical quantities:
 
-- Default volume exclusion strength (k_ev = 200) has been optimized through testing
-- The simulation supports both single and multiple trial runs
-- Data analysis typically focuses on the final 85% of simulation time
-- Position data can be quite large due to the number of time steps
+- Time series of bead positions
+- Radius of gyration (Rg)
+- End-to-end distance
+- Chain conformations at different time points
 
-## Author
+## Limitations
 
-spyderkam (March 11, 2021 - September 7, 2022)
+- 2D simulations only
+- No hydrodynamic interactions
+- Limited to single chain dynamics
+
+## License
+
+[Add your license information here]
