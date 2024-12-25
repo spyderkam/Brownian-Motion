@@ -60,7 +60,7 @@ bead = Bead(x=0, y=0, r=0.04)  # Create a bead at (0,0) with radius 0.04
 ### Simulation Class
 ```python
 sim = Simulation(nbeads=10, conf='linear')  # Create a linear chain with 10 beads
-sim.advance(dt=0.0001, κ_ev=200)  # Run simulation with excluded volume
+sim.advance(dt=0.0001, κ_ev=200)            # Run simulation with excluded volume
 ```
 
 ### Example
