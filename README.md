@@ -42,7 +42,7 @@ project/
 
 #### run.py
 - Executes simulations for specified chain lengths
-- Saves position data and metrics (Rg & Ree) to files
+- Saves position data and metrics ($R_{\mathrm{g}}$ & $R_{\mathrm{ee}}$) to files
 - Supports batch processing of multiple chain lengths
 
 #### auto-extract.ipynb
