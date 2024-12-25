@@ -1,4 +1,4 @@
-# Brownian Polymer Chain Simulation
+# Single Polymer Chain Brownian Dynamics
 
 A Python implementation to simulate single polymer chains using Brownian dynamics. The simulation models beads connected by springs under the influence of Brownian motion, excluded volume effects, and finitely extensible non-linear elastic (FENE) forces.
 
@@ -73,15 +73,16 @@ Computes the forces acting on the bead.
 - `Ls` (float, optional): Contour length. Default is `None`
 - `kBT` (float): Thermal energy. Default is `1`.
 - `lk` (float): Kuhn length. Default is `1`.
-- `conf` (str): Configuration type, either 'linear' or 'circular'. Default is `'linear'`.
+- `conf` (str): Configuration type, either `'linear'` or `'circular'`. Default is `'linear'`.
+  - Please note that this parameter only affects a chain of beads and has no barring on an individual bead.
 
 ##### `advance(self, Δt, b=1, κ=0)`
 Advances the bead's position over time based on the sum of forces acting on it, following the overdamped Langevin equation.
 
 **Parameters:**
 - `Δt` (float): time step size.
-- `b` (float): Drag coefficient. Default is 1.
-- `κ` (float): Spring constant (replaces k to avoid kernel confusion). Default is 0.
+- `b` (float): Drag coefficient. Default is `1`.
+- `κ` (float): Spring constant (replaces `k` to avoid kernel confusion). Default is `0`.
 
 **Returns:**
 None, but updates:
