@@ -40,8 +40,6 @@ where:
 
 ## Usage
 
-Here's the complete documentation in markdown format:
-
 ### Bead Class
 
 #### Overview
