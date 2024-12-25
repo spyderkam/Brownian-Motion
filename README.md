@@ -60,7 +60,7 @@ bead = Bead(x=0, y=0, r=0.04)  # Create a bead at (0,0) with radius 0.04
 ### Simulation Class
 ```python
 sim = Simulation(nbeads=10, conf='linear')  # Create a linear chain with 10 beads
-sim.advance(dt=0.0001, kappa_ev=200)  # Run simulation with excluded volume
+sim.advance(dt=0.0001, κ_ev=200)  # Run simulation with excluded volume
 ```
 
 ### Example
@@ -69,7 +69,7 @@ import brownian_bead as bb
 
 # Create and run a simple simulation
 sim = bb.Simulation(nbeads=2)
-sim.advance(dt=0.0001, kappa_ev=200)
+sim.advance(dt=0.0001, κ_ev=200)
 
 # Access simulation results
 print(bb.Rg)  # Radius of gyration
@@ -82,7 +82,7 @@ Key simulation parameters:
 
 - `dt`: Time step size (default: 0.0001)
 - `N`: Number of iterations (default: 2000001)
-- `kappa_ev`: Excluded volume constant (default: 200)
+- `κ_ev`: Excluded volume constant (default: 200)
 - `b`: Drag coefficient (default: 1)
 - `Ls`: Maximum spring length (default: 1)
 - `lk`: Kuhn length (default: 0.1)
