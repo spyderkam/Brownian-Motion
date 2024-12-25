@@ -12,15 +12,15 @@ This project simulates the behavior of polymer chains using Brownian dynamics, a
   - Linear chains
   - Circular chains
 - Configurable parameters:
-  - Number of beads (tested from 5 to 100 beads)
-  - Time steps (default N = 2,000,001)
+  - Number of beads (tested from $5$ to $100$ beads)
+  - Time steps (default $N = 2,\!000,\!001$)
   - Time step size (Δt = 0.0001)
-  - Volume exclusion strength (k_ev, optimal at 200)
+  - Volume exclusion strength (`k_ev`, optimal at `200`)
 - Analysis capabilities:
-  - Radius of gyration (Rg) calculation
-  - End-to-end distance (Ree) measurement
-  - Mean Square Displacement (MSD) computation
-  - Relaxation time (τ) extraction
+  - Radius of gyration ($R_{\mathrm{g}}$) calculation
+  - End-to-end distance ($R_{\mathrm{ee}}$) measurement
+  - Mean Square Displacement ($\mathrm{MSD}$) computation
+  - Relaxation time ($\tau$) extraction
 
 ## Project Structure
 
@@ -47,8 +47,8 @@ project/
 
 #### auto-extract.ipynb
 - Jupyter notebook for data analysis
-- Extracts relaxation times (τ)
-- Calculates average Rg and Ree after relaxation
+- Extracts relaxation times ($\tau$)
+- Calculates average $R_{\mathrm{g}}$ and $R_{\mathrm{ee}}$ after relaxation
 - Includes various data processing options (e.g., 85/15 split for analysis)
 
 ## Usage
