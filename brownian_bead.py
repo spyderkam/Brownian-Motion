@@ -44,8 +44,8 @@ class Bead:
           FENE2 = (3*kBT/lk)*( (r2/Ls) / (1 - (r2/Ls)**2) )
           x_FENE2 = FENE2 * (self.x - xs[j+1])/r2     # FENE2 * cos(θ)
           y_FENE2 = FENE2 * (self.y - ys[j+1])/r2     # FENE2 * sin(θ)
-        
-        FENE1 = (3*kBT/lk)*( (r1/Ls) / (1 - (r1/Ls)**2) )     
+
+        FENE1 = (3*kBT/lk)*( (r1/Ls) / (1 - (r1/Ls)**2) )
         x_FENE1 = FENE1 * (self.x - xs[j-1])/r1     # FENE1 * cos(φ)
         y_FENE1 = FENE1 * (self.y - ys[j-1])/r1     # FENE1 * sin(φ)
 
@@ -100,7 +100,7 @@ class Bead:
           if d < Ls/1.336:     # check if any volume is excluded
             biscl_x.append((Ls/1.336 - d) * Δx/d)
             biscl_y.append((Ls/1.336 - d) * Δy/d)
-              
+
         x_force = x_force + k_ev*np.sum(biscl_x)
         y_force = y_force + k_ev*np.sum(biscl_y);
 
@@ -135,7 +135,7 @@ class Simulation:
       self.ψ = (2*np.pi)/nbeads     # initial angle between beads
       self.ρ= 0.09/self.ψ           # radius = (0.09*nbeads)/(2*np.pi)
       self.beads = [self.init_bead(self.ρ*np.cos(self.ψ*i), self.ρ*np.sin(self.ψ*i)) for i in range(nbeads)]
-    
+
     elif conf == 'linear':
        self.beads = [self.init_bead(i*.09,0) for i in range(nbeads)]
 
@@ -169,7 +169,7 @@ class Simulation:
       if self.conf == 'circular':
         all_sim_pos.append([(self.ρ*np.cos(self.ψ*i), self.ρ*np.sin(self.ψ*i))])
       elif self.conf == 'linear':
-        all_sim_pos.append([(i*.09,0)]) 
+        all_sim_pos.append([(i*.09,0)])
 
     for bead in self.beads:
       xs.append(bead.x)     # store all the init pos of the beads
@@ -195,20 +195,8 @@ class Simulation:
 if __name__ == '__main__':
   '''The Fundumentals'''
 
-  import matplotlib; matplotlib.use('TkAgg')     # try disabling if error
-  import matplotlib.pyplot as plt
-  #from scipy.optimize import curve_fit
-
-  Δt = .0001      # time step
-  t = []          # time array
-  tt = 0          # temp element of time array
-  for i in range(N):
-    t.append(tt)
-    tt += Δt
-  del tt
-
   sim = Simulation(nbeads=2)
-  sim.advance(Δt, κ_ev=200)     # κ_ev = 200 seems optimal
+  sim.advance(Δt=0.0001, κ_ev=200)     # κ_ev = 200 seems optimal
 
   Ree = []     # end-to-end radius; i.e., \sqrt{x^2 + y^2}
   for xy in end_to_end:
