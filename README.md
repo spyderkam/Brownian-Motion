@@ -26,7 +26,7 @@ where:
 
 - Simulates both linear and circular polymer chains
 - Configurable number of beads
-- Adjustable simulation parameters (time step, spring constants, etc.)
+- Adjustable simulation parameters (time-step, spring constants, etc.)
 - Calculates physical properties like:
   - Radius of gyration
   - End-to-end distance
@@ -80,7 +80,7 @@ print(bb.end_to_end)  # End-to-end distances
 
 Key simulation parameters:
 
-- `dt`: Time step size (default: 0.0001)
+- `dt`: time-step size (default: 0.0001)
 - `N`: Number of iterations (default: 2000001)
 - `κ_ev`: Excluded volume constant (default: 200)
 - `b`: Drag coefficient (default: 1)
