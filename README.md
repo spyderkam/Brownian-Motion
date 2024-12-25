@@ -14,7 +14,7 @@ This project simulates the behavior of polymer chains using Brownian dynamics, a
 - Configurable parameters:
   - Number of beads (tested from $5$ to $100$ beads)
   - Time steps (default $N = 2,\\\!000,\\\!001$)
-  - Time step size (Δt = 0.0001)
+  - Time step size ($Δt = 0.0001$)
   - Volume exclusion strength (`k_ev`, optimal at `200`)
 - Analysis capabilities:
   - Radius of gyration ($R_{\mathrm{g}}$) calculation
