@@ -72,7 +72,7 @@ sim = bb.Simulation(nbeads=2)
 sim.advance(dt=0.0001, κ_ev=200)
 
 # Access simulation results
-print(bb.Rg)  # Radius of gyration
+print(bb.Rg)          # Radius of gyration
 print(bb.end_to_end)  # End-to-end distances
 ```
 
