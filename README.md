@@ -26,7 +26,7 @@ where:
 
 - Simulates both linear and circular polymer chains
 - Configurable number of beads
-- Configurable number of time steps (N = 2000001 by default)
+- Configurable number of time steps, (`N = 2000001` by default but can be changed)
 - Adjustable simulation parameters (time step, spring constants, etc.)
 - Calculates physical properties like:
   - Radius of gyration
@@ -37,19 +37,6 @@ where:
   - Real chains (with excluded volume)
   - Circular chains (polymer rings)
 
-## Installation
-
-1. Clone this repository:
-
-```bash
-git clone [repository-url]
-```
-
-2. Required dependencies:
-
-```bash
-pip install numpy matplotlib
-```
 
 ## Usage
 
