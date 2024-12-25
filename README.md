@@ -93,7 +93,7 @@ Key simulation parameters:
 The simulation outputs several physical quantities:
 
 - Time series of bead positions
-- Radius of gyration (Rg)
+- Radius of gyration (`Rg`)
 - End-to-end distance
 - Chain conformations at different time points
 
