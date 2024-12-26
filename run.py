@@ -2,12 +2,12 @@
 
 
 """
-   This script runs "brownian_bead" and records the positions
-   to one file and Rg & Ree to another file.
+   This script runs "brownian_beads.py" and records the 
+   positions to one file and Rg & Ree to another file.
 """
 
 
-import brownian_bead as bb
+import brownian_beads as bb
 import numpy as np
 import os
 
