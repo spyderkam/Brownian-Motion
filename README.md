@@ -115,7 +115,7 @@ The `Simulation` class manages the simulation of a Brownian polymer chain consis
 
 #### Attributes
 - `nbeads` (int): Number of beads in the polymer chain
-- `conf` (str): Configuration type ('linear' or 'circular')
+- `conf` (str): Configuration type (`'linear'` or `'circular'`)
 - `ψ` (float): Initial angle between beads (circular configuration only)
 - `ρ` (float): Initial radius of circular configuration = `(0.09*nbeads)/(2*π)`
 - `beads` (list): List of Bead objects comprising the polymer chain
