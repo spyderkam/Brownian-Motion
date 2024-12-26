@@ -84,7 +84,7 @@ Advances the bead's position over time based on the sum of forces acting on it, 
 
 **Returns:**
 None, but updates:
-- `positions_xy`: List of (x,y) coordinates over time
+- `positions_xy`: List of (x, y) coordinates over time
 - `all_pos_xy`: Global list containing position histories of all beads
 - Updates the bead's position attributes (`self.x`, `self.y`)
 
