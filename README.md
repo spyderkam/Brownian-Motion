@@ -6,7 +6,7 @@ A Python implementation to simulate single polymer chains using Brownian dynamic
 
 The simulation is based on the *overdamped Langevin equation*, which models the motion of particles in a fluid where inertial effects are negligible. The forces acting on each bead include:
 
-- Brownian\random forces (thermal noise)
+- Brownian/random forces (thermal noise)
 - FENE spring forces between consecutive beads
 - Optional excluded volume forces between beads
 
