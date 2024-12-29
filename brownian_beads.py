@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-# 3/11/2021 — 9/7/2022
+__author__ = "Kam Modjtahedzadeh"
+__date__ =  "03/11/2021 — 09/07/2022"
 
 import numpy as np
 
@@ -175,7 +176,7 @@ class Simulation:
       xs.append(bead.x)     # store all the init pos of the beads
       ys.append(bead.y)
     end_to_end.append((xs[-1] - xs[0], ys[-1] - ys[0]))  # 1st e2e element
-    Rg.append(np.sqrt(np.var(xs) + np.var(ys)))          # 1st Rg element
+    Rg.append(np.sqrt(np.var(xs) + np.var(ys)))          # 1st Rg element (Rg^2 would be more efficient)
 
     for i in range(N-1):
       for n, bead in enumerate(self.beads):                                                           # Ls=1.5d0, lk=d0
