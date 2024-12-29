@@ -17,7 +17,7 @@ all_pos_xy = []     # (x, y) of bead in random walk
 all_sim_pos = []    # (x, y) position of all beads in simulation
 xs = None; ys = None
 end_to_end = []     # end 2 end dist. of chain @ each time in simulation
-Rg = []             # radius of gyration
+Rg2 = []            # radius of gyration squared
 
 
 ################  Bead Class  ################
@@ -176,7 +176,7 @@ class Simulation:
       xs.append(bead.x)     # store all the init pos of the beads
       ys.append(bead.y)
     end_to_end.append((xs[-1] - xs[0], ys[-1] - ys[0]))  # 1st e2e element
-    Rg.append(np.sqrt(np.var(xs) + np.var(ys)))          # 1st Rg element (Rg^2 would be more efficient)
+    Rg2.append(np.var(xs) + np.var(ys))                  # 1st Rg^2 element
 
     for i in range(N-1):
       for n, bead in enumerate(self.beads):                                                           # Ls=1.5d0, lk=d0
@@ -188,7 +188,7 @@ class Simulation:
       xs = xj; ys = yj       # advance all at once
       xj = []; yj = []       # reset to advance all at once next time
       end_to_end.append((xs[-1] - xs[0], ys[-1] - ys[0]))   # e2e @ each time
-      Rg.append(np.sqrt(np.var(xs) + np.var(ys)))           # Rg @ each time; Rg^2 would be much better for computation time
+      Rg2.append(np.var(xs) + np.var(ys))                   # Rg^2 @ each time
     xs = None; ys = None     # reset xs and ys to
 ###############################################################################
 
