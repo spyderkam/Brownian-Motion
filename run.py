@@ -9,9 +9,9 @@
 
 import brownian_beads as bb
 import numpy as np
-import os
+#import subprocess
 
-nbeads_lst = (90, 100)
+nbeads_lst = (2, 5)
 k_ev = 200
 configuration = "circular"
 Δt = .0001
@@ -33,9 +33,9 @@ for nbeads in nbeads_lst:
     print("[b] Saving coordinates")
 
     array0 = np.array(bb.all_sim_pos)
-    with open(f'pos_data/data/circular/k_ev=200/nbeads{nbeads}-k_ev{k_ev}.npy', 'wb') as f:
+    with open(f'../data/pos_data/k_ev=200/nbeads{nbeads}-k_ev{k_ev}.npy', 'wb') as f:
         np.save(f, array0)
-    array1 = np.load(f'pos_data/data/circular/k_ev=200/nbeads{nbeads}-k_ev{k_ev}.npy')
+    array1 = np.load(f'../data/pos_data/k_ev=200/nbeads{nbeads}-k_ev{k_ev}.npy')
 
     # make sure arrays are the same
     comparison = (array0 == array1)     # don't need parantheses
@@ -51,10 +51,10 @@ for nbeads in nbeads_lst:
 
     print("[c] Writing Rg & Ree")
 
-    file = open(f"simulated_data/circular/k_ev=200/ave_rg_ree_n{nbeads}-k_ev{k_ev}.dat", "w")  # "a" vs "w"
-    for i, s in enumerate(bb.Rg):
+    file = open(f"../data/simulated_data/k_ev=200/ave_rg2_ree_n{nbeads}-k_ev{k_ev}.dat", "w")  # "a" vs "w"
+    for i, s in enumerate(bb.Rg2):
 
-        a = str( bb.Rg[i] )
+        a = str( bb.Rg2[i] )
         b = str( Ree[i] )
         c = a + " " + b
 
@@ -66,7 +66,6 @@ for nbeads in nbeads_lst:
     bb.all_pos_xy = []  
     bb.all_sim_pos = [] 
     bb.end_to_end = []
-    bb.Rg = []
+    bb.Rg2 = []
     if nbeads != nbeads_lst[-1]:
         print("=========")
-#os.system('cmd.exe /c shutdown /s')
