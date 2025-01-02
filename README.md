@@ -159,7 +159,7 @@ Advances the entire polymer chain simulation over time.
 **Updates:**
 - `xs`, `ys`: Lists of current bead positions
 - `end_to_end`: End-to-end distance at each time step
-- `Rg`: Radius of gyration at each time step
+- `Rg2`: Radius of gyration squared at each time step
 - `all_sim_pos`: Position history of all beads
 
 **Algorithm:**
@@ -189,7 +189,7 @@ circular_sim.advance(Δt=0.0001)
 - `Fx_sim`, `Fy_sim`: Arrays of random forces
 - `xs`, `ys`: Current positions of all beads
 - `end_to_end`: Chain end-to-end distance history
-- `Rg`: Radius of gyration history
+- `Rg2`: Radius of gyration squared history
 - `all_sim_pos`: Complete position history of all beads
 
 #### Notes
