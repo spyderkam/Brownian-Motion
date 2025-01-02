@@ -9,7 +9,7 @@
 
 import brownian_beads as bb
 import numpy as np
-#import subprocess
+#import os
 
 nbeads_lst = (2, 5)
 k_ev = 200
@@ -69,3 +69,4 @@ for nbeads in nbeads_lst:
     bb.Rg2 = []
     if nbeads != nbeads_lst[-1]:
         print("=========")
+#os.system('cmd.exe /c shutdown /s')
