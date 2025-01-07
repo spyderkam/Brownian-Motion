@@ -98,8 +98,8 @@ None, but updates:
 
 #### Example Usage
 ```python
-# Create a new bead with initial position (0, 0) and radius 0.04
-bead = Bead(x=0, y=0, r=0.04)
+# Create a new bead with initial position (0, 0)
+bead = Bead(x=0, y=0)
 
 # Calculate forces on the bead with index 1
 bead.force_calculate(j=1)
