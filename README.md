@@ -46,8 +46,8 @@ where:
 The `Bead` class represents a 2D bead with a radius and an initial position in Cartesian coordinates. It includes methods to initialize the bead and calculate forces acting on it.
 
 #### Attributes
-- `x` (float): The x-coordinate of the bead's center.
-- `y` (float): The y-coordinate of the bead's center.
+- `x` (float): The 𝑥-coordinate of the bead's center.
+- `y` (float): The 𝑦-coordinate of the bead's center.
 - `r` (float): The radius of the bead.
 
 #### Methods
@@ -56,8 +56,8 @@ The `Bead` class represents a 2D bead with a radius and an initial position in C
 Initializes a new instance of the `Bead` class with the specified position and radius.
 
 **Parameters:**
-- `x` (float): Initial x-coordinate of the bead's center. Default is `0`.
-- `y` (float): Initial y-coordinate of the bead's center. Default is `0`.
+- `x` (float): Initial 𝑥-coordinate of the bead's center. Default is `0`.
+- `y` (float): Initial 𝑦-coordinate of the bead's center. Default is `0`.
 - `r` (float): Radius of the bead. Default is `0.04`.
 
 ##### `force_calculate(self, j, jj=None, k=0, k_ev=0, Ls=None, kBT=1, lk=1, conf='linear')`
@@ -84,7 +84,7 @@ Advances the bead's position over time based on the sum of forces acting on it, 
 
 **Returns:**
 None, but updates:
-- `positions_xy`: List of (x, y) coordinates over time
+- `positions_xy`: List of (𝑥, 𝑦) coordinates over time
 - `all_pos_xy`: Global list containing position histories of all beads
 - Updates the bead's position attributes (`self.x`, `self.y`)
 
@@ -127,8 +127,8 @@ Initializes a new polymer chain simulation.
 
 **Parameters:**
 - `nbeads` (int): Number of beads in the chain
-- `x` (float): Initial x-coordinate. Default is `0`.
-- `y` (float): Initial y-coordinate. Default is `0`.
+- `x` (float): Initial 𝑥-coordinate. Default is `0`.
+- `y` (float): Initial 𝑦-coordinate. Default is `0`.
 - `conf` (str): Configuration type (`'linear'` or `'circular'`). Default is `'linear'`.
 
 **Initialization Process:**
@@ -142,8 +142,8 @@ Initializes a new polymer chain simulation.
 Creates a new bead instance.
 
 **Parameters:**
-- `x` (float): x-coordinate for the bead. Default is `0`.
-- `y` (float): y-coordinate for the bead. Default is `0`.
+- `x` (float): 𝑥-coordinate for the bead. Default is `0`.
+- `y` (float): 𝑦-coordinate for the bead. Default is `0`.
 
 **Returns:**
 - `Bead`: A new Bead instance
