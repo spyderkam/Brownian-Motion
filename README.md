@@ -13,14 +13,14 @@ The simulation is based on the *overdamped Langevin equation*, which models the 
 The key equation governing the bead motion is:
 
 ```
-dr/dt = ∑F/b
+d𝒳/d𝑡 = ∑𝐹/𝑏
 ```
 
 where:
 
-- `r` <!--`𝒳`--> is position 
-- `F` represents the sum of forces
-- `b` is the drag coefficient
+- `𝒳` <!--`𝒳`--> is position 
+- `𝐹` represents the sum of forces
+- `𝑏` is the drag coefficient
 
 ## Features
 
